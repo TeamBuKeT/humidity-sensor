@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">HumiditySensor</string>
+    <string name="app_name">Humidity Sensor</string>
+    <string name="taux_d_humidit">Taux d\'humidité :</string>
+    <string name="arroser">Arroser</string>
 </resources>
