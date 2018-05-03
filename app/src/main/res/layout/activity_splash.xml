@@ -12,6 +12,7 @@
         android:id="@+id/splash"
         android:layout_width="247dp"
         android:layout_height="100dp"
-        android:background="@mipmap/ic_launcher" />
+        android:background="@drawable/test"
+        android:layout_marginBottom="200dp"/>
 
 </LinearLayout>
