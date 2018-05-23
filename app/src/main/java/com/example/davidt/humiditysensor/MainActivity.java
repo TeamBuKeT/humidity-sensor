@@ -6,17 +6,34 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 public class MainActivity extends AppCompatActivity {
+    FirebaseDatabase database;
+    DatabaseReference humidity, arrosage;
+    TextView TVTauxHumidity;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        database = FirebaseDatabase.getInstance();
+        humidity = database.getReference("humidity");
+        arrosage = database.getReference("arrosage");
+        TVTauxHumidity = findViewById(R.id.TVHumidity);
         Button button = (Button) findViewById(R.id.BtnWater);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -24,6 +41,46 @@ public class MainActivity extends AppCompatActivity {
                 onClickWater();
             }
         });
+
+        // Read from the database
+        humidity.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                Long value = (Long) dataSnapshot.getValue();
+                TVTauxHumidity.setText(String.valueOf(value));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Toast.makeText(getBaseContext(), "Echec de lecture" + error.toException(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //ajoute les entrées de items à l'ActionBar
+        getMenuInflater().inflate(R.menu.items, menu);
+        return true;
+    }
+
+    //gère le click sur une action de l'ActionBar
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_settings:
+                Intent intent = new Intent(MainActivity.this,
+                        SettingActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void onClickWater() {
@@ -37,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 .setMessage("Etes-vous sur de vouloir arroser la plante ?")
                 .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        //TODO : Envoyer l'ordre d'arroser à Arduino
+                        arrosage.setValue(1);
                         Toast.makeText(getBaseContext(), "Arrosage en cours !",
                                 Toast.LENGTH_LONG).show();
                     }

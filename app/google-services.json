@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "445191771925-q4u3hh1ipg1a5fkhqgs25q3cajqs5jgs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.davidt.humiditysensor",
+            "certificate_hash": "52b2706db91d85842cb2008ef9853f9e9eab2046"
+          }
+        },
+        {
           "client_id": "445191771925-89r4vvphkdqgrhmpk7l1ok2e093pbkj0.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "445191771925-89r4vvphkdqgrhmpk7l1ok2e093pbkj0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

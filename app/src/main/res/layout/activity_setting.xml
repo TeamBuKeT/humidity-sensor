@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RLContent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.davidt.humiditysensor.SettingActivity">
+
+    <RelativeLayout
+        android:id="@+id/RLMin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/TVMin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="@string/humidity_min"
+            android:layout_marginLeft="20dp"/>
+
+        <NumberPicker
+            android:id="@+id/PickerMin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/TVMin"
+            android:layout_toRightOf="@+id/TVMin"
+            android:layout_marginLeft="20dp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/RLMax"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/RLMin"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/TVMax"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:text="@string/humidity_max"
+            android:layout_marginLeft="20dp"/>
+
+        <NumberPicker
+            android:id="@+id/PickerMax"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/TVMax"
+            android:layout_toRightOf="@+id/TVMax"
+            android:layout_marginLeft="20dp"/>
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnEnregistrer"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="10dp"
+        android:onClick="onClickEnregistrer"
+        android:text="enregistrer" />
+
+</RelativeLayout>
