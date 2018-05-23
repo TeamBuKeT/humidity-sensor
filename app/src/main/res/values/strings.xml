@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">HumiditySensor</string>
+    <string name="app_name">Humidity Sensor</string>
+    <string name="taux_d_humidit">Taux d\'humidité :</string>
+    <string name="arroser">Arroser</string>
+    <string name="settings">Paramètres</string>
+    <string name="humidity_min">Taux d\'humidité minimum :</string>
+    <string name="humidity_max">Taux d\'humidité maximum :</string>
+    <string name="arrosage_cours">Arrosage en cours :</string>
 </resources>
