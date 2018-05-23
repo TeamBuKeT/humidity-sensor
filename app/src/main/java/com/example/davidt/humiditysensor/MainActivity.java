@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,8 +23,9 @@ import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
     FirebaseDatabase database;
-    DatabaseReference humidity, arrosage;
+    DatabaseReference humidity, arrosage, en_cours;
     TextView TVTauxHumidity;
+    ImageView imageArrosage;
 
 
     @Override
@@ -33,12 +35,37 @@ public class MainActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         humidity = database.getReference("humidity");
         arrosage = database.getReference("arrosage");
+        en_cours = database.getReference("en_cours");
+
         TVTauxHumidity = findViewById(R.id.TVHumidity);
         Button button = (Button) findViewById(R.id.BtnWater);
+        imageArrosage = findViewById(R.id.imgArrosage);
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 onClickWater();
+            }
+        });
+
+        // Read from the database
+        en_cours.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                Long value = (Long) dataSnapshot.getValue();
+                if (value == 1) {
+                    imageArrosage.setImageResource(R.drawable.presence_online);
+                }else {
+                    imageArrosage.setImageResource(R.drawable.presence_busy);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Toast.makeText(getBaseContext(), "Echec de lecture" + error.toException(),
+                        Toast.LENGTH_LONG).show();
             }
         });
 

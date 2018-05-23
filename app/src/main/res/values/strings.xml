@@ -5,4 +5,5 @@
     <string name="settings">Paramètres</string>
     <string name="humidity_min">Taux d\'humidité minimum :</string>
     <string name="humidity_max">Taux d\'humidité maximum :</string>
+    <string name="arrosage_cours">Arrosage en cours :</string>
 </resources>
