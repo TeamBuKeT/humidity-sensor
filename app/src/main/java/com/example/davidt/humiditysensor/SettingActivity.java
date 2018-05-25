@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import static java.lang.Math.toIntExact;
@@ -25,8 +26,9 @@ import com.google.firebase.database.ValueEventListener;
 public class SettingActivity extends AppCompatActivity implements NumberPicker.OnValueChangeListener {
     NumberPicker pickerMin, pickerMax;
     FirebaseDatabase database;
-    DatabaseReference minimum, maximum;
+    DatabaseReference minimum, maximum, automatic;
     Long tauxMin, tauxMax;
+    Switch switchAuto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class SettingActivity extends AppCompatActivity implements NumberPicker.O
         setContentView(R.layout.activity_setting);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Button button = (Button) findViewById(R.id.btnEnregistrer);
+        switchAuto = findViewById(R.id.switchAutomatic);
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -44,6 +47,7 @@ public class SettingActivity extends AppCompatActivity implements NumberPicker.O
         database = FirebaseDatabase.getInstance();
         minimum = database.getReference("minimum");
         maximum = database.getReference("maximum");
+        automatic = database.getReference("automatic");
 
         pickerMin = findViewById(R.id.PickerMin);
         pickerMax = findViewById(R.id.PickerMax);
@@ -92,6 +96,29 @@ public class SettingActivity extends AppCompatActivity implements NumberPicker.O
             }
         });
 
+        // Read from the database
+        automatic.addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                Long value = (Long) dataSnapshot.getValue();
+                if (value == 1) {
+                    switchAuto.setChecked(true);
+                } else {
+                    switchAuto.setChecked(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Toast.makeText(getBaseContext(), "Echec de lecture" + error.toException(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+
 
     }
 
@@ -114,6 +141,11 @@ public class SettingActivity extends AppCompatActivity implements NumberPicker.O
         tauxMax = Long.valueOf(pickerMax.getValue());
         minimum.setValue(tauxMin);
         maximum.setValue(tauxMax);
+        if (switchAuto.isChecked()) {
+            automatic.setValue(1);
+        } else {
+            automatic.setValue(0);
+        }
         this.finish();
     }
 }

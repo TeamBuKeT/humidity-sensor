@@ -3,6 +3,7 @@ package com.example.davidt.humiditysensor;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,9 +24,11 @@ import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
     FirebaseDatabase database;
-    DatabaseReference humidity, arrosage, en_cours;
+    DatabaseReference humidity, arrosage, en_cours, automatic;
     TextView TVTauxHumidity;
     ImageView imageArrosage;
+    Button boutonWater;
+    Long arrosage_en_cours;
 
 
     @Override
@@ -36,12 +39,12 @@ public class MainActivity extends AppCompatActivity {
         humidity = database.getReference("humidity");
         arrosage = database.getReference("arrosage");
         en_cours = database.getReference("en_cours");
+        automatic = database.getReference("automatic");
 
         TVTauxHumidity = findViewById(R.id.TVHumidity);
-        Button button = (Button) findViewById(R.id.BtnWater);
+        boutonWater = findViewById(R.id.BtnWater);
         imageArrosage = findViewById(R.id.imgArrosage);
-
-        button.setOnClickListener(new View.OnClickListener() {
+        boutonWater.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 onClickWater();
             }
@@ -53,11 +56,15 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                Long value = (Long) dataSnapshot.getValue();
-                if (value == 1) {
-                    imageArrosage.setImageResource(R.drawable.presence_online);
+                arrosage_en_cours = (Long) dataSnapshot.getValue();
+                if (arrosage_en_cours == 1) {
+                    imageArrosage.setImageResource(R.drawable.green);
+                    boutonWater.setBackgroundColor(getResources().getColor(R.color.arrosage_red));
+                    boutonWater.setText(R.string.stop_water);
                 }else {
-                    imageArrosage.setImageResource(R.drawable.presence_busy);
+                    imageArrosage.setImageResource(R.drawable.red);
+                    boutonWater.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                    boutonWater.setText(R.string.arroser);
                 }
             }
 
@@ -79,6 +86,30 @@ public class MainActivity extends AppCompatActivity {
                 TVTauxHumidity.setText(String.valueOf(value));
             }
 
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Toast.makeText(getBaseContext(), "Echec de lecture" + error.toException(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+
+        // Read from the database
+        automatic.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Long value = (Long) dataSnapshot.getValue();
+                if (value == 1) {
+                    //Désactivation du bouton
+                    boutonWater.setEnabled(false);
+                    boutonWater.setVisibility(View.GONE);
+                }else {
+                    //Activation du bouton
+                    boutonWater.setEnabled(true);
+                    boutonWater.setVisibility(View.VISIBLE);
+
+                }
+            }
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
@@ -117,21 +148,28 @@ public class MainActivity extends AppCompatActivity {
         } else {
             builder = new AlertDialog.Builder(this);
         }
-        builder.setTitle("Arrosage")
-                .setMessage("Etes-vous sur de vouloir arroser la plante ?")
-                .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        arrosage.setValue(1);
-                        Toast.makeText(getBaseContext(), "Arrosage en cours !",
-                                Toast.LENGTH_LONG).show();
-                    }
-                })
-                .setNegativeButton("Non", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
+        if (arrosage_en_cours == 0) {
+            builder.setTitle("Arrosage")
+                    .setMessage("Etes-vous sur de vouloir arroser la plante ?")
+                    .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            en_cours.setValue(1);
+                            Toast.makeText(getBaseContext(), "Arrosage en cours !",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
+        else {
+            en_cours.setValue(0);
+
+        }
+
     }
 }

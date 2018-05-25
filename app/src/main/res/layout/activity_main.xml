@@ -8,14 +8,39 @@
     tools:context="com.example.davidt.humiditysensor.MainActivity">
 
 
+    <RelativeLayout
+        android:id="@+id/RLArrosage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp">
+
+        <ImageView
+            android:id="@+id/imgArrosage"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toEndOf="@+id/TVArrosageCours"
+            android:layout_toRightOf="@+id/TVArrosageCours"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/TVArrosageCours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="@string/arrosage_cours" />
+    </RelativeLayout>
+
     <TextView
         android:id="@+id/LabelHumidity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/TVHumidity"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="20dp"
-        android:text="@string/taux_d_humidit" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:text="@string/taux_d_humidit"
+        android:layout_marginLeft="10dp"/>
 
     <TextView
         android:id="@+id/TVHumidity"
@@ -39,28 +64,4 @@
         android:layout_margin="10dp"
         android:text="@string/arroser" />
 
-    <RelativeLayout
-        android:id="@+id/RLArrosage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp">
-
-        <ImageView
-            android:id="@+id/imgArrosage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/TVArrosageCours"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/TVArrosageCours"
-            android:layout_toRightOf="@+id/TVArrosageCours"
-            app:srcCompat="@android:drawable/presence_busy" />
-
-        <TextView
-            android:id="@+id/TVArrosageCours"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:text="@string/arrosage_cours" />
-    </RelativeLayout>
 </RelativeLayout>
