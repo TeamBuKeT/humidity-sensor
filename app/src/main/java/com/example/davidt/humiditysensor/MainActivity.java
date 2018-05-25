@@ -24,7 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
     FirebaseDatabase database;
-    DatabaseReference humidity, arrosage, en_cours, automatic;
+    DatabaseReference humidity, en_cours, automatic;
     TextView TVTauxHumidity;
     ImageView imageArrosage;
     Button boutonWater;
@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         database = FirebaseDatabase.getInstance();
         humidity = database.getReference("humidity");
-        arrosage = database.getReference("arrosage");
         en_cours = database.getReference("en_cours");
         automatic = database.getReference("automatic");
 
